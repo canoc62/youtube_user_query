@@ -11,11 +11,11 @@ def build_youtube_service(devKey):
 
 def get_channel_info(youtube_service, youtube_username): 
 
-    #user_list = {
-    #   "users": [
+    user_list = {
+       "users": [
 
-    #    ]
-    #}
+        ]
+    }
 
     results = youtube_service.channels().list(
         part="snippet, statistics",
@@ -44,13 +44,13 @@ def get_channel_info(youtube_service, youtube_username):
     
         user_object["channels"].append(channel)
 
-    #user_list["users"].append(
-    #    user_object
-    #)
+    user_list["users"].append(
+        user_object
+    )
 
     youtube_file = 'youtube_%s.json' %(youtube_username)
     f = open(youtube_file, 'w')
-    f.write(json.dumps(user_object, indent=4, sort_keys=False))
+    f.write(json.dumps(user_list, indent=4, sort_keys=False))
     f.close()
          
 
