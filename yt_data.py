@@ -10,12 +10,11 @@ user_list = {
     ]
 }
 
-# Can use username or channel_id for channel query
-def get_channel_info(youtube_service, username): #channel_id):
+
+def get_channel_info(youtube_service, username): 
     results = youtube_service.channels().list(
         part="snippet, statistics",
         forUsername=username
-        #id=channel_id
     ).execute()
 
     user_object = {
@@ -52,9 +51,8 @@ def get_channel_info(youtube_service, username): #channel_id):
 
 # Test
 
-#yt_channel_id = "UCtblLfYa5QmFUndxGGdp24g"
 username = "RealRobReport"
-get_channel_info(youtube_service, username)#yt_channel_id)
+get_channel_info(youtube_service, username)
 
 
 
