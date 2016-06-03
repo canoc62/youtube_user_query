@@ -10,22 +10,47 @@ def build_youtube_service(devKey):
     return youtube_service
 
 
-def write_channel_info(youtube_service, youtube_username): 
+def get_channel_id_list(youtube_service):
 
+    channel_id_list = []
+
+    video_list = youtube_service.videos().list(
+        part="snippet",
+        chart="mostPopular",
+        regionCode="US",
+
+    ).execute()
+
+    for video in video_list["items"]:
+        channel_id_list.append(video["snippet"]["channelId"])
+
+    return channel_id_list
+
+
+def create_channel_list(youtube_service, user_list):
+
+    for channel_id in user_list:
+        write_channel_info(youtube_service, channel_id)
+
+
+def write_channel_info(youtube_service, channel_id): 
+
+    '''
     user_list = {
         "users": [
 
         ]
     }
+    '''
 
     results = youtube_service.channels().list(
         part="snippet, statistics",
-        forUsername=youtube_username
+        id=channel_id
     ).execute()
 
     user_object = {
         "meta": {
-            "username": youtube_username
+            "channel_id": channel_id
         },
         "channels": [
 
@@ -45,13 +70,17 @@ def write_channel_info(youtube_service, youtube_username):
     
         user_object["channels"].append(channel)
 
+    '''
     user_list["users"].append(
         user_object
     )
+    '''
 
-    youtube_file = 'youtube_%s.json' %(youtube_username)
+    # FIND A WAY TO OPEN EXTERNAL FILE AND WRITE TO SPECIFIC 
+    # PART OF THAT FILE (ADD CHANNEL TO USER(CHANNEL) LIST IN JSON OBJECT)
+    youtube_file = 'youtube_%s.json' %(channel_id)
     f = open(youtube_file, 'w')
-    f.write(json.dumps(user_list, indent=4, sort_keys=False))
+    f.write(json.dumps(user_object, indent=4, sort_keys=False))
     f.close()
          
 
@@ -60,12 +89,4 @@ def write_channel_info(youtube_service, youtube_username):
 youtube = build_youtube_service(
     'AIzaSyAM5ytZfxRt9lAJBZkCDG8aFATE9030mAg'
 )
-
-username = "RealRobReport"
-get_channel_info(youtube, username)
 '''
-
-
-
-
-
